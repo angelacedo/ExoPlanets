@@ -30,12 +30,13 @@ const EvolutionExoDiscover: React.FC<Props> = ({ data, month, year }) =>
     useEffect(() => setActualYearData(filterYearFromDiscoveredExoplanets(data, year)), [data]);
     return (
         <div className='w-[100%] md:w-[59%] md:ml-[1%] mt-[1%] md:mt-0 shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
-            {actualYearData && actualYearData.length > 0 ? <>            <div className='flex justify-between p-3'>
-                <h3 className='font-bold'>Evolution of the discovered exoplanets</h3>
-                <select defaultValue={year} className='border rounded-lg p-1' onChange={(e) => setActualYearData(filterYearFromDiscoveredExoplanets(data, Number(e.currentTarget.value)))}>
-                    {getYearsFromDiscoveredExoplanets(data, year).map(val => <option key={`opt-${val}`}>{val}</option>)}
-                </select>
-            </div>
+            {actualYearData && actualYearData.length > 0 ? <>
+                <div className='flex justify-between p-3'>
+                    <h3 className='font-bold'>Evolution of the discovered exoplanets</h3>
+                    <select defaultValue={year} className='border rounded-lg p-1' onChange={(e) => setActualYearData(filterYearFromDiscoveredExoplanets(data, Number(e.currentTarget.value)))}>
+                        {getYearsFromDiscoveredExoplanets(data, year).map(val => <option key={`opt-${val}`}>{val}</option>)}
+                    </select>
+                </div>
                 <ResponsiveContainer width="100%" height={350}>
                     <LineChart width={730} height={350} data={actualYearData}
                         margin={{ top: 30, right: 40, left: 0, bottom: 30 }}>

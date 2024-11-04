@@ -36,21 +36,22 @@ const DiscoveredExoplanets: React.FC<Props> = ({ data, month, year }) =>
     useEffect(() => setActualYearData(filterYearFromDiscoveredExoplanets(data, year)), [data]);
     return (
 
-        <div className='w-[100%] md:w-[40%] shadow-md rounded-lg bg-cards-color p-3 min-h-[450px]'>
-            {actualYearData && actualYearData.length > 0 ? <><ResponsiveContainer width="100%" height={250}>
-                <BarChart data={actualYearData} className="rounded-xl bg-color-bar-chart" margin={{ top: 30, right: 40, left: 0, bottom: 30 }}>
-                    <CartesianGrid strokeDasharray="5" vertical={false} />
-                    <XAxis dataKey="month" stroke="var(--bg-color-bar-chart-axe)" tickLine={false} />
-                    <YAxis axisLine={false} tickMargin={10} tickLine={false} stroke="var(--bg-color-bar-chart-axe)" />
-                    <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
-                    <Bar dataKey="exoplanetsCount" name="Discovered Exoplanets" fill="var(--bg-color)" barSize={5} radius={10} />
-                </BarChart>
-            </ResponsiveContainer>
-
-                <h3 className='font-bold mt-3'>Discovered Exoplanets by month</h3>
-                <p>
-                    {actualYearData && actualYearData.length > 0 ? <span>{compareMonthPercentage() + "% than last month"}</span> : <span>Loading Data...</span>}
-                </p></> : <p>Loading data</p>}
+        <div className='w-[100%] md:w-[40%] md:mt-0 shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
+            {actualYearData && actualYearData.length > 0 ? <>
+                <div className='p-3'>
+                    <h3 className='font-bold'>Discovered Exoplanets by month</h3>
+                    <span>{compareMonthPercentage() + "% than last month"}</span>
+                </div>
+                <ResponsiveContainer width="100%" height={350}>
+                    <BarChart data={actualYearData} className="rounded-xl bg-color-bar-chart" margin={{ top: 30, right: 40, left: 0, bottom: 30 }}>
+                        <CartesianGrid strokeDasharray="5" vertical={false} />
+                        <XAxis dataKey="month" stroke="var(--bg-color-bar-chart-axe)" tickLine={false} />
+                        <YAxis axisLine={false} tickMargin={10} tickLine={false} stroke="var(--bg-color-bar-chart-axe)" />
+                        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
+                        <Bar dataKey="exoplanetsCount" name="Discovered Exoplanets" fill="var(--bg-color)" barSize={10} radius={10} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </> : <p>Loading data</p>}
         </div>
 
     );
