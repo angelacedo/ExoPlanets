@@ -39,6 +39,7 @@ export interface Exoplanet {
   elat_solnid: string | null
   elat_reflink: string | null
   elatstr: string | null
+  sy_dist: number | null
 }
 
 

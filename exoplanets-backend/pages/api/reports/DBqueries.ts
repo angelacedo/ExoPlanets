@@ -1,10 +1,13 @@
-export const getExoplanets = (limit: string) => `${process.env.TAP_URL_SYNC}?query=${encodeURIComponent(`select TOP ${limit} * from pscomppars`)}&format=json`;
+export const getExoplanets = (limit: string) => `${process.env.TAP_URL_SYNC}?query=${encodeURIComponent(`SELECT * FROM
+        (SELECT pscomppars.*, ROW_NUMBER() OVER (ORDER BY disc_pubdate DESC) AS row_num FROM pscomppars)
+        WHERE row_num <= ${limit}
+        `)}&format=json`;
 
 export const getNumberOfExoplanets = (year: string) => `${process.env.TAP_URL_SYNC}?query=${encodeURIComponent(`select COUNT(*) AS count from pscomppars${year ? ` where SUBSTR(disc_pubdate, 1, 4) = ${year}` : ''}`)}&format=json`;
 
 export const getNumberOfClosestPlanets = (distance: string) => `${process.env.TAP_URL_SYNC}?query=${encodeURIComponent(`SELECT COUNT(*) as count FROM pscomppars WHERE sy_dist <= ${distance} ORDER BY sy_dist ASC`)}&format=json`;
 
-export const getExoplanetsByMonth = (year: string) => `${process.env.TAP_URL_SYNC}?query=${encodeURIComponent(`SELECT
+export const getExoplanetsByMonth = () => `${process.env.TAP_URL_SYNC}?query=${encodeURIComponent(`SELECT
                     SUBSTR(disc_pubdate, 1, 4) AS year,
                     SUBSTR(disc_pubdate, 6, 2) AS month,
                     COUNT(*) AS exoplanetsCount

@@ -1,7 +1,6 @@
 import logo from '@/img/logo.png';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import ExoplanetApi from "../../api/Exoplanets";
 import { Exoplanet } from "../../models/Exoplanet";
 function Header()
@@ -20,22 +19,23 @@ function Header()
 
 
   return (
-    <header className='flex' >
+    <header className='flex w-full' >
       <div className='w-[20%]'>
         <img src={logo} width={100} alt="" />
       </div>
-      <div className="flex w-[80%] items-center">
-        <div className="title w-[20%]">
-          <h3 className='font-thin' color='var(--generic-text-color)'>DashBoard</h3>
-        </div>
-        <search className='flex justify-end items-center w-[80%]'>
+      <nav className="font-thin flex items-center">
+        <Link className='mx-auto mr-5' color='var(--generic-text-color)' to="/">DashBoard</Link>
+        <Link className='mx-auto' color='var(--generic-text-color)' to="/repository">Repository</Link>
+      </nav>
+
+      {/*  <search className='flex justify-end items-center w-[80%]'>
           <form className='flex justify-end w-[40%] border rounded-lg overflow-hidden'>
-            <button className='w-[10%] rounded-l-sm p-2 bg-[var(--input-bg-color)] outline-none'><FontAwesomeIcon icon={faSearch} width={10} color="var(--generic-text-color-black)"/></button>
+            <button className='w-[10%] rounded-l-sm p-2 bg-[var(--input-bg-color)] outline-none'><FontAwesomeIcon icon={faSearch} width={10} color="var(--generic-text-color-black)" /></button>
             <input className='text-sm w-[90%] rounded-r-sm p-2 bg-[var(--input-bg-color)] outline-none' type="search" name="search" autoComplete="off" />
 
           </form>
-        </search>
-      </div>
+        </search> */}
+
 
 
     </header>

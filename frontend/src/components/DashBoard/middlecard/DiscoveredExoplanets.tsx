@@ -14,7 +14,7 @@ const CustomTooltip = ({ active, payload }: any) =>
     if (active && payload && payload.length > 0)
     {
         return (
-            <div className="bg-white p-4 rounded-lg opacity-75">
+            <div className="bg-white p-4 rounded-lg opacity-75 border border-gray-400">
                 <p className="label">{`${getMonthName(payload[0].payload.month)}`}</p>
                 <p className="intro">{`Exoplanetas descubiertos: ${payload[0].value}`}</p>
             </div>

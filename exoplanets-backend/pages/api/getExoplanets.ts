@@ -78,7 +78,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           elat: val.elat,
           elat_solnid: val.elat_solnid,
           elat_reflink: val.elat_reflink,
-          elatstr: val.elatstr
+          elatstr: val.elatstr,
+          sy_dist: val.sy_dist
         };
       });
       response.data = data;

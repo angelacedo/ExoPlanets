@@ -1,11 +1,11 @@
-import { Exoplanet } from "@models/Exoplanet";
 
 
 export const getExoplanets = async (limit: number) =>
 {
     const url = `${import.meta.env.VITE_API_URL}getExoplanets?limit=${limit}`;
-    const response: Exoplanet[] = await (await fetch(url)).json();
-    return response;
+    console.log(url)
+    const response = await (await fetch(url)).json();
+    return response.data;
 };
 
 export const getNumberOfExoplanets = async (year: number | null) =>

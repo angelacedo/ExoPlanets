@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
   else
   {
-    const baseurl: string = DBQueries.getExoplanetsByMonth(year as string);
+    const baseurl: string = DBQueries.getExoplanetsByMonth();
     const queryResponse = await (await fetch(baseurl)).json();
     if (queryResponse)
     {
