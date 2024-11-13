@@ -36,14 +36,14 @@ const DiscoveredExoplanets: React.FC<Props> = ({ data, month, year }) =>
     useEffect(() => setActualYearData(filterYearFromDiscoveredExoplanets(data, year)), [data]);
     return (
 
-        <div className='w-[100%] md:w-[40%] md:mt-0 shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
+        <div className='w-[100%] md:w-[40%] shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
             {actualYearData && actualYearData.length > 0 ? <>
                 <div className='p-3'>
                     <h3 className='font-bold'>Discovered Exoplanets by month</h3>
                     <span>{compareMonthPercentage() + "% than last month"}</span>
                 </div>
-                <ResponsiveContainer width="100%" height={350}>
-                    <BarChart data={actualYearData} className="rounded-xl bg-color-bar-chart" margin={{ top: 30, right: 40, left: 0, bottom: 30 }}>
+                <ResponsiveContainer width="100%" height="80%">
+                    <BarChart data={actualYearData} className="rounded-xl bg-color-bar-chart" margin={{ top: 30, right: 40, left: 0, bottom: 20 }}>
                         <CartesianGrid strokeDasharray="5" vertical={false} />
                         <XAxis dataKey="month" stroke="var(--bg-color-bar-chart-axe)" tickLine={false} />
                         <YAxis axisLine={false} tickMargin={10} tickLine={false} stroke="var(--bg-color-bar-chart-axe)" />
