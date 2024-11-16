@@ -1,25 +1,10 @@
 import logo from '@/img/logo.png';
-import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
-import ExoplanetApi from "../../api/Exoplanets";
-import { Exoplanet } from "../../models/Exoplanet";
 function Header()
 {
-  const [exoplanets, setExoplanets] = useState<Exoplanet[]>();
-
-  useEffect(() =>
-  {
-    const getExoplanets = async () =>
-    {
-      const response = await ExoplanetApi.getExoplanets(1);
-      setExoplanets(response);
-    };
-    getExoplanets();
-  }, []);
-
 
   return (
-    <header className='flex w-full' >
+    <header className='flex w-full border-b-[1px] border-b-[var(--bg-color-bar-chart-axe)] shadow-md' >
       <div className='w-[20%]'>
         <img src={logo} width={100} alt="" />
       </div>

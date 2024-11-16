@@ -67,7 +67,7 @@ const DashBoard = () =>
     }, []);
 
     return (
-        <div>
+        <div className='my-3 mx-5'>
             <section className="flex flex-wrap sm:flex-row sm:flex-nowrap justify-center items-center lg:max-w-[80%] lg:m-auto">
                 <TopCard title={"Discovered Exoplanets"} data={topCardsValues.discoveredExoplanetsNumber || 0} icon={<IoEarth width={15} color="var(--generic-text-color)" />} />
                 <TopCard title={`Dicovered Exoplanets (${year})`} data={topCardsValues.discoveredExoplanetsNumberThisYear || 0} icon={<IoStar width={15} color="var(--generic-text-color)" />} />

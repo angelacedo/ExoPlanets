@@ -8,7 +8,7 @@ import './index.css';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <Header />
+      <Header/>
       <Routes>
         <Route index element={<DashBoard />} />
         <Route path='/repository' element={<DashBoard />} />
