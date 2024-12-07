@@ -1,6 +1,6 @@
-import { Exoplanet } from "@/models/Exoplanet";
+import { Exoplanet } from "@/models/DashBoard/Exoplanet";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 
 interface Props
@@ -11,7 +11,6 @@ interface Props
 const LastExoplanetsTable: React.FC<Props> = ({ data }) =>
 {
     const [onHoverRow, setOnHoverRow] = useState<number | null>(null);
-    useEffect(() => console.log(onHoverRow), [onHoverRow]);
     const columns = useMemo(
         () => [
             {
@@ -65,8 +64,8 @@ const LastExoplanetsTable: React.FC<Props> = ({ data }) =>
                                     <tr className="border-b border-collapse" key={row.id}>
                                         {row.getVisibleCells().map((cell, cellIndex) => (
                                             <td className={`p-4 ${cellIndex == 0 ? "font-bold" : "font-thin text-[var(--primary-color)]"}`}
-                                                data-rowIndex={String(rowIndex)}
-                                                data-cellIndex={String(cellIndex)}
+                                                data-rowindex={String(rowIndex)}
+                                                data-cellindex={String(cellIndex)}
                                                 key={cell.id}>
                                                 <div className="flex items-center relative">
                                                     {cell.getValue() as JSX.Element}

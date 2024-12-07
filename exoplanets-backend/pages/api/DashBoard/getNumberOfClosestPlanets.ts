@@ -1,8 +1,10 @@
 import { Response } from "@/models/Response";
 import Cors from 'cors';
+import { FieldPacket, RowDataPacket } from "mysql2";
 import { NextApiRequest, NextApiResponse } from "next";
-import { runMiddleware } from "./middlewares/middleware";
-import DBqueries from "./reports/DBqueries";
+import { connect, executeQuery } from "../../db/DBController";
+import DBqueries from "../../db/DBqueries";
+import { runMiddleware } from "../middlewares/middleware";
 
 // Inicializamos cors
 const cors = Cors({
@@ -12,12 +14,13 @@ const cors = Cors({
 export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
   const middlewareResponse = await runMiddleware(req, res, cors);
-  const year = req.query.year;
+  const distance = req.query.distance || "10";
   let response: Response = {
     status: 200,
     errorMessage: null,
     data: null,
-    rowCount: null
+    rowCount: null,
+    limit: null
   };
   if (middlewareResponse instanceof Error)
   {
@@ -25,20 +28,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       status: 500,
       errorMessage: "Error: " + (middlewareResponse as Error).message,
       data: null,
-      rowCount: null
+      rowCount: null,
+      limit: null
     };
   } else
   {
-    const baseurl: string = DBqueries.getNumberOfExoplanets(year as string);
-    const queryResponse = await (await fetch(baseurl)).json();
-    if (queryResponse)
-      response.rowCount = queryResponse[0].count;
+    const sql: string = DBqueries.getNumberOfClosestPlanets();
+    const connection = await connect();
+    let [rows]: [RowDataPacket[], FieldPacket[]] = await executeQuery(connection, sql, [Number(distance)]);
+
+    if (rows)
+      response.rowCount = rows[0].count;
     else
       response = {
         status: 500,
         errorMessage: "Ups! An error has ocurred, try again later.",
         data: null,
-        rowCount: null
+        rowCount: null,
+        limit: null
       };
   }
   res.status(response.status).json(response);

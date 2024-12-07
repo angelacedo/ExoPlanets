@@ -10,7 +10,6 @@
   --bg-color-top-card: linear-gradient(135deg, rgba(18, 130, 162, 1) 0%, rgba(3, 64, 120, 1) 100%);
   --generic-text-color: #ffff;
   --generic-text-color-black: #0a0a0a;
-  --input-bg-color: #FEFCFB;
   --bg-color-bar-chart: linear-gradient(135deg, rgba(58, 65, 111, 1) 0%, rgba(20, 23, 39, 1) 100%);
   --bg-color-bar-chart-axe: #c1c1c1;
   --bg-cards-color: var(--generic-text-color);
@@ -38,18 +37,36 @@ h3 {
   font-size: 1rem;
 }
 
-span {
-  font-size: 0.9rem;
-}
-
-p {
+p,span {
   font-size: 0.8rem;
 }
 
 input {
   color: var(--generic-text-color-black);
 }
-
+input[type="checkbox"]{
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--info-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  min-height: 15px;
+  min-width: 15px;
+  font-size: 10px;
+}
+input[type="checkbox"]:checked {
+  transition: 1s;
+  background-color: var(--info-color); /* Color de fondo cuando está clicado */
+}
+input[type="checkbox"]:checked:after {
+ content: '✔';
+ font-weight: bold;
+ color: #FFFF;
+}
 .bg-color-top-card {
   background: var(--bg-color-top-card);
 }

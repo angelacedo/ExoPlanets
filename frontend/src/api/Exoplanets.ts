@@ -1,30 +1,32 @@
 
 
-export const getExoplanets = async (limit: number) =>
+export const getExoplanets = async (limit: number | null, fromOrigin: number | null) =>
 {
-    const url = `${import.meta.env.VITE_API_URL}getExoplanets?limit=${limit}`;
-    console.log(url)
+    console.log(limit, fromOrigin)
+    const url = `${import.meta.env.VITE_API_URL}Global/getExoplanets${limit ? `?limit=${limit}&fromOrigin=${fromOrigin}`: ''}`;
+
     const response = await (await fetch(url)).json();
+
     return response.data;
 };
 
 export const getNumberOfExoplanets = async (year: number | null) =>
 {
-    const url = `${import.meta.env.VITE_API_URL}getNumberOfExoplanets${year ? `?year=${year}` : ''}`;
+    const url = `${import.meta.env.VITE_API_URL}DashBoard/getNumberOfExoplanets${year ? `?year=${year}` : ''}`;
     const response = await (await fetch(url)).json();
     return response.rowCount;
 };
 
 export const getNumberOfClosestPlanets = async (distance: number | null) =>
 {
-    const url = `${import.meta.env.VITE_API_URL}getNumberOfClosestPlanets${distance ? `?distance=${distance}` : ''}`;
+    const url = `${import.meta.env.VITE_API_URL}DashBoard/getNumberOfClosestPlanets${distance ? `?distance=${distance}` : ''}`;
     const response = await (await fetch(url)).json();
     return response.rowCount;
 };
 
-export const getExoplanetsByMonth = async (year: number | null) =>
+export const getExoplanetsByMonth = async () =>
 {
-    const url = `${import.meta.env.VITE_API_URL}getExoplanetsByMonth${year ? `?year=${year}` : ''}`;
+    const url = `${import.meta.env.VITE_API_URL}DashBoard/getExoplanetsByMonth`;
     const response = await (await fetch(url)).json();
     return response.data;
 };

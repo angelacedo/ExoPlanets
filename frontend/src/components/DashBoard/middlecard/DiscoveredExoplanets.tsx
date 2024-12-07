@@ -1,4 +1,4 @@
-import { ExoplanetByMonth } from '@models/Exoplanet';
+import { ExoplanetByMonth } from '@/models/DashBoard/Exoplanet';
 import { filterYearFromDiscoveredExoplanets, getMonthName } from '@utils/date';
 import { useEffect, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -25,11 +25,29 @@ const CustomTooltip = ({ active, payload }: any) =>
 };
 const DiscoveredExoplanets: React.FC<Props> = ({ data, month, year }) =>
 {
+
     const [actualYearData, setActualYearData] = useState<ExoplanetByMonth[] | null>(filterYearFromDiscoveredExoplanets(data, year));
+
     const compareMonthPercentage = () =>
     {
-        const percentage = (actualYearData![month].exoplanetsCount * 100) / actualYearData![month - 1].exoplanetsCount;
-        return (percentage - 100).toFixed(2);
+        const actualMonthExoCount = actualYearData![month] ? actualYearData![month].exoplanetsCount : null;
+        const prevMonthExoCount = actualYearData![month - 1] ? actualYearData![month - 1].exoplanetsCount : null;
+        let percentage: number | null = 0;
+
+        if (actualMonthExoCount !== null && actualMonthExoCount !== undefined && prevMonthExoCount !== null && prevMonthExoCount !== undefined)
+            if (actualMonthExoCount >= prevMonthExoCount)
+                percentage = ((Number(actualMonthExoCount) - Number(prevMonthExoCount)) / Number(prevMonthExoCount)) * 100;
+            else
+                percentage = -((Number(actualMonthExoCount) - Number(prevMonthExoCount)) / Number(prevMonthExoCount)) * 100;
+        else
+            percentage = null;
+
+        if (percentage != null && Number(percentage) >= 0)
+            return <p><span className='text-green-600'> {(percentage).toFixed(2)}</span>% than last month</p>;
+        else if (percentage != null && Number(percentage) < 0)
+            return <p><span className='text-red-600'> {(percentage).toFixed(2)}</span>% than last month</p>;
+        else
+            return <span>NaN</span>;
     };
 
 
@@ -38,9 +56,9 @@ const DiscoveredExoplanets: React.FC<Props> = ({ data, month, year }) =>
 
         <div className='w-[100%] md:w-[40%] shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
             {actualYearData && actualYearData.length > 0 ? <>
-                <div className='p-3'>
+                <div className='p-3 md:px-0 py-1'>
                     <h3 className='font-bold'>Discovered Exoplanets by month</h3>
-                    <span>{compareMonthPercentage() + "% than last month"}</span>
+                    {compareMonthPercentage()}
                 </div>
                 <ResponsiveContainer width="100%" height="80%">
                     <BarChart data={actualYearData} className="rounded-xl bg-color-bar-chart" margin={{ top: 30, right: 40, left: 0, bottom: 20 }}>

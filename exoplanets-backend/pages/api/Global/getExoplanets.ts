@@ -1,9 +1,10 @@
+import { Exoplanet } from "@/models/Exoplanet";
 import { Response } from "@/models/Response";
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from "next";
-import { runMiddleware } from "./middlewares/middleware";
-import DBQueries from "./reports/DBqueries";
-
+import { connect, executeQuery } from "../../db/DBController";
+import DBqueries from "../../db/DBqueries";
+import { runMiddleware } from "../middlewares/middleware";
 // Inicializamos cors
 const cors = Cors({
   methods: ['GET', 'HEAD'], // Define los métodos permitidos (puedes agregar POST, PUT, etc.)
@@ -12,35 +13,43 @@ const cors = Cors({
 export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
   const middlewareResponse = await runMiddleware(req, res, cors);
-  const year = req.query.year || new Date().getFullYear().toString();
+  const { limit, fromOrigin } = req.query;
+  console.log('getExoplanets: ' + limit, fromOrigin);
   let response: Response = {
     status: 200,
     errorMessage: null,
     data: null,
-    rowCount: null
+    rowCount: null,
+    limit: null
   };
   if (middlewareResponse instanceof Error)
+  {
     response = {
       status: 500,
       errorMessage: "Error: " + (middlewareResponse as Error).message,
       data: null,
-      rowCount: null
+      rowCount: null,
+      limit: null
     };
-  else
+  } else
   {
-    const baseurl: string = DBQueries.getExoplanetsByMonth();
-    const queryResponse = await (await fetch(baseurl)).json();
-    if (queryResponse)
+    const baseurl: string = DBqueries.getExoplanets(limit);
+    const connection = await connect();
+    let [rows] = await executeQuery(connection, baseurl, [fromOrigin, limit]);
+
+    if (rows)
     {
-      response.data = queryResponse;
-      response.rowCount = queryResponse.length;
-    }
-    else
+      const data = (rows as Exoplanet[]);
+      response.data = data;
+      response.rowCount = data.length;
+      response.limit = Number(limit);
+    } else
       response = {
         status: 500,
         errorMessage: "Ups! An error has ocurred, try again later.",
         data: null,
-        rowCount: null
+        rowCount: null,
+        limit: null
       };
   }
   res.status(response.status).json(response);

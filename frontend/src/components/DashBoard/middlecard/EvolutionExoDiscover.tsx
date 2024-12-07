@@ -1,4 +1,4 @@
-import { ExoplanetByMonth } from '@models/Exoplanet';
+import { ExoplanetByMonth } from '@/models/DashBoard/Exoplanet';
 import { filterYearFromDiscoveredExoplanets, getMonthName, getYearsFromDiscoveredExoplanets } from '@utils/date';
 import { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -25,13 +25,13 @@ const CustomTooltip = ({ active, payload }: any) =>
 };
 const EvolutionExoDiscover: React.FC<Props> = ({ data, month, year }) =>
 {
-    const [actualYearData, setActualYearData] = useState<ExoplanetByMonth[] | null>(filterYearFromDiscoveredExoplanets(data, year));
+    const [actualYearData, setActualYearData] = useState<ExoplanetByMonth[] | null>();
+    useEffect(() => setActualYearData(filterYearFromDiscoveredExoplanets(data, year)), [data?.length ?? 0 > 0]);
 
-    useEffect(() => setActualYearData(filterYearFromDiscoveredExoplanets(data, year)), [data]);
     return (
-        <div className='w-[100%] md:w-[59%] ml-[1%] md:mt-0 mt-[1%] shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
+        <div className='w-[100%] md:w-[59%] ml-[1%] sm: md:mt-0 mt-[1%] shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
             {actualYearData && actualYearData.length > 0 ? <>
-                <div className='flex justify-between p-3'>
+                <div className='flex justify-between p-3 md:px-0 py-1'>
                     <h3 className='font-bold'>Evolution of the discovered exoplanets</h3>
                     <select defaultValue={year} className='border rounded-lg p-1' onChange={(e) => setActualYearData(filterYearFromDiscoveredExoplanets(data, Number(e.currentTarget.value)))}>
                         {getYearsFromDiscoveredExoplanets(data, year).map(val => <option key={`opt-${val}`}>{val}</option>)}
@@ -50,7 +50,16 @@ const EvolutionExoDiscover: React.FC<Props> = ({ data, month, year }) =>
                         <XAxis dataKey="month" stroke="var(--bg-color-bar-chart-axe)" tickLine={false} />
                         <YAxis axisLine={false} tickMargin={10} tickLine={false} stroke="var(--bg-color-bar-chart-axe)" />
                         <Tooltip content={<CustomTooltip />} />
-                        <Area type="monotone" dataKey="exoplanetsCount" strokeWidth={3} stroke="var(--areachar-color)" fill="url(#colorValue)" />
+                        <Area type="monotone"
+                            dataKey="exoplanetsCount"
+                            strokeWidth={3}
+                            stroke="var(--areachar-color)"
+                            fill="url(#colorValue)"
+                            isAnimationActive={true} // Activa la animación
+                            animationBegin={0} // Tiempo de espera antes de empezar (en ms)
+                            animationDuration={1500}
+
+                        />
                     </AreaChart>
                 </ResponsiveContainer></> : <p>Loading data</p>}
 

@@ -18,7 +18,6 @@ export interface Exoplanet {
   rastr: string | null
   ra_solnid: string | null
   ra_reflink: string | null
-  dec: number | null
   decsymerr: number | null
   decstr: string | null
   dec_solnid: string | null
