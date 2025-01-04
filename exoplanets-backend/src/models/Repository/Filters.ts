@@ -1,14 +1,17 @@
+import { PlanetType } from "./ExoplanetType";
+
 
 export interface Filters
 {
     clearButton: boolean;
     searchByText: string | null;
     rangeFilters: RangeFilters[] | null;
+    checkBoxFilters: CheckBoxFilters[] | null;
     selectFilters: SelectFilters[] | null;
-    showFilters: boolean;
     applyChanges: boolean;
-
+    showFilters: boolean;
 }
+
 
 export interface RangeFilters
 {
@@ -19,9 +22,16 @@ export interface RangeFilters
     step: number
 }
 
+
+export interface CheckBoxFilters
+{
+    title: string,
+    checked: boolean;
+}
+
 export interface SelectFilters
 {
     title: string,
     options: string[],
-    value: string | null
+    value: PlanetType
 }

@@ -1,15 +1,16 @@
+import { Filters } from "@/models/Repository/Filters";
+import { createUrl } from "@/utils/urls";
 
-
+//Global
 export const getExoplanets = async (limit: number | null, fromOrigin: number | null) =>
 {
-    console.log(limit, fromOrigin)
-    const url = `${import.meta.env.VITE_API_URL}Global/getExoplanets${limit ? `?limit=${limit}&fromOrigin=${fromOrigin}`: ''}`;
-
+    const url = `${import.meta.env.VITE_API_URL}Global/getExoplanets${limit ? `?limit=${limit}&fromOrigin=${fromOrigin}` : ''}`;
     const response = await (await fetch(url)).json();
 
     return response.data;
 };
 
+//DashBoard
 export const getNumberOfExoplanets = async (year: number | null) =>
 {
     const url = `${import.meta.env.VITE_API_URL}DashBoard/getNumberOfExoplanets${year ? `?year=${year}` : ''}`;
@@ -31,4 +32,26 @@ export const getExoplanetsByMonth = async () =>
     return response.data;
 };
 
-export default { getExoplanets, getNumberOfExoplanets, getNumberOfClosestPlanets, getExoplanetsByMonth };
+export const getLastTimeUpdated = async () =>
+{
+    const url = `${import.meta.env.VITE_API_URL}DashBoard/getLastTimeUpdated`;
+    const response = await (await fetch(url)).json();
+    return response.lastTimeUpdated;
+};
+//Repository
+export const getExoplanetsWithFilters = async (limit: number | null, fromOrigin: number | null, filters: Filters) =>
+{
+
+    const params = {
+        limit,
+        fromOrigin,
+        filters
+    };
+
+    const url = createUrl(`${import.meta.env.VITE_API_URL}Repository/getExoplanetsWithFilters`, params);
+    const response = await (await fetch(url)).json();
+
+    return response;
+};
+
+export default { getExoplanets, getNumberOfExoplanets, getNumberOfClosestPlanets, getExoplanetsByMonth, getLastTimeUpdated, getExoplanetsWithFilters };

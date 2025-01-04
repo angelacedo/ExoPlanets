@@ -2,7 +2,7 @@ import { Response } from "@/models/Response";
 import Cors from 'cors';
 import { FieldPacket, RowDataPacket } from "mysql2";
 import { NextApiRequest, NextApiResponse } from "next";
-import { connect, executeQuery } from "../../db/DBController";
+import { close, connect, executeQuery } from "../../db/DBController";
 import DBqueries from "../../db/DBqueries";
 import { runMiddleware } from "../middlewares/middleware";
 
@@ -14,41 +14,45 @@ const cors = Cors({
 export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
   const middlewareResponse = await runMiddleware(req, res, cors);
-  const year = req.query.year;
 
-  console.log(year)
   let response: Response = {
     status: 200,
     errorMessage: null,
     data: null,
-    rowCount: null,
-    limit: null
+    rowCount: null
   };
-  if (middlewareResponse instanceof Error)
+
+  const connection = await connect();
+  try
   {
-    response = {
-      status: 500,
-      errorMessage: "Error: " + (middlewareResponse as Error).message,
-      data: null,
-      rowCount: null,
-      limit: null
-    };
-  } else
-  {
-    const sql: string = DBqueries.getNumberOfExoplanets(year);
-    const connection = await connect();
-    let [rows] : [RowDataPacket[], FieldPacket[]] = await executeQuery(connection, sql, year == undefined ? [] : [year]);
-    if (rows){
-      response.rowCount = rows[0].count;
+    if (middlewareResponse instanceof Error)
+    {
+      response.status = 500;
+      response.errorMessage = "Error: " + (middlewareResponse as Error).message
+    } else
+    {
+      const year = req.query.year;
+      const sql: string = DBqueries.getNumberOfExoplanets(year);
+      let [rows]: [RowDataPacket[], FieldPacket[]] = await executeQuery(connection, sql, year == undefined ? [] : [year]);
+      if (rows)
+        response.rowCount = rows[0].count;
+      else
+      {
+        response.status = 500;
+        response.errorMessage = "Ups! An error has ocurred, try again later."
+      }
     }
+  } catch (error)
+  {
+    response.status = 500;
+    if (error instanceof Error)
+      response.errorMessage = "Unknown Error: " + error.message;
     else
-      response = {
-        status: 500,
-        errorMessage: "Ups! An error has ocurred, try again later.",
-        data: null,
-        rowCount: null,
-        limit: null
-      };
+      response.errorMessage = "Unknown Error: " + error;
+    res.status(response.status).json(response);
+  } finally
+  {
+    close(connection);
   }
   res.status(response.status).json(response);
 }

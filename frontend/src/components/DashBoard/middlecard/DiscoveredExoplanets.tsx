@@ -1,4 +1,5 @@
-import { ExoplanetByMonth } from '@/models/DashBoard/Exoplanet';
+import Loader from '@/components/Loader';
+import { ExoplanetByMonth } from '@/models/Global/Exoplanet';
 import { filterYearFromDiscoveredExoplanets, getMonthName } from '@utils/date';
 import { useEffect, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -32,6 +33,7 @@ const DiscoveredExoplanets: React.FC<Props> = ({ data, month, year }) =>
     {
         const actualMonthExoCount = actualYearData![month] ? actualYearData![month].exoplanetsCount : null;
         const prevMonthExoCount = actualYearData![month - 1] ? actualYearData![month - 1].exoplanetsCount : null;
+        console.log(actualMonthExoCount, prevMonthExoCount);
         let percentage: number | null = 0;
 
         if (actualMonthExoCount !== null && actualMonthExoCount !== undefined && prevMonthExoCount !== null && prevMonthExoCount !== undefined)
@@ -43,9 +45,9 @@ const DiscoveredExoplanets: React.FC<Props> = ({ data, month, year }) =>
             percentage = null;
 
         if (percentage != null && Number(percentage) >= 0)
-            return <p><span className='text-green-600'> {(percentage).toFixed(2)}</span>% than last month</p>;
+            return <p><span className='text-green-600'> {(percentage).toFixed(2)}</span>% less than last month</p>;
         else if (percentage != null && Number(percentage) < 0)
-            return <p><span className='text-red-600'> {(percentage).toFixed(2)}</span>% than last month</p>;
+            return <p><span className='text-red-600'> {(percentage).toFixed(2)}</span>% more than last month</p>;
         else
             return <span>NaN</span>;
     };
@@ -61,15 +63,16 @@ const DiscoveredExoplanets: React.FC<Props> = ({ data, month, year }) =>
                     {compareMonthPercentage()}
                 </div>
                 <ResponsiveContainer width="100%" height="80%">
-                    <BarChart data={actualYearData} className="rounded-xl bg-color-bar-chart" margin={{ top: 30, right: 40, left: 0, bottom: 20 }}>
-                        <CartesianGrid strokeDasharray="5" vertical={false} />
-                        <XAxis dataKey="month" stroke="var(--bg-color-bar-chart-axe)" tickLine={false} />
-                        <YAxis axisLine={false} tickMargin={10} tickLine={false} stroke="var(--bg-color-bar-chart-axe)" />
+                    <BarChart data={actualYearData} className="rounded-xl" margin={{ top: 30, right: 40, left: 0, bottom: 20 }}>
+                        <CartesianGrid strokeDasharray="5" vertical={false} color=''/>
+                        <XAxis dataKey="month" stroke="var(--color-axe)" tickLine={false} />
+                        <YAxis axisLine={false} tickMargin={10} tickLine={false} stroke="var(--color-axe)" />
                         <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
-                        <Bar dataKey="exoplanetsCount" name="Discovered Exoplanets" fill="var(--bg-color)" barSize={10} radius={10} />
+                        <Bar dataKey="exoplanetsCount" name="Discovered Exoplanets" fill="var(--accent-color)" barSize={10} radius={10} />
                     </BarChart>
                 </ResponsiveContainer>
-            </> : <p>Loading data</p>}
+            </> : <div className='flex justify-center items-center h-full'>{Loader(true, 50)}</div>
+            }
         </div>
 
     );

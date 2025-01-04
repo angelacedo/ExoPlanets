@@ -1,10 +1,11 @@
-import { Exoplanet } from "@/models/Exoplanet";
 import { Response } from "@/models/Response";
 import Cors from 'cors';
+import { FieldPacket, RowDataPacket } from "mysql2";
 import { NextApiRequest, NextApiResponse } from "next";
-import { close, connect, executeQuery } from "../../db/DBController";
-import DBqueries from "../../db/DBqueries";
+import { close, connect, executeQuery } from '../../db/DBController';
+import DBQueries from "../../db/DBqueries";
 import { runMiddleware } from "../middlewares/middleware";
+
 // Inicializamos cors
 const cors = Cors({
   methods: ['GET', 'HEAD'], // Define los métodos permitidos (puedes agregar POST, PUT, etc.)
@@ -13,15 +14,12 @@ const cors = Cors({
 export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
   const middlewareResponse = await runMiddleware(req, res, cors);
-
   let response: Response = {
     status: 200,
     errorMessage: null,
     data: null,
-    limit: null
+    lastTimeUpdated: null
   };
-
-
   const connection = await connect();
   try
   {
@@ -29,26 +27,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     {
       response.status = 500;
       response.errorMessage = "Error: " + (middlewareResponse as Error).message;
-    } else
+    }
+    else
     {
-      const { limit, fromOrigin } = req.query;
-      const baseurl: string = DBqueries.getExoplanets(limit);
-
-      let [rows] = await executeQuery(connection, baseurl, fromOrigin && limit ? [fromOrigin, limit] : []);
+      const sql: string = DBQueries.getLastTimeUpdated();
+      let [rows]: [RowDataPacket[], FieldPacket[]] = await executeQuery(connection, sql, []);
+      console.log(new Date(rows[0].last_update).toLocaleString());
       if (rows)
-      {
-        const data = (rows as Exoplanet[]);
-
-        response.data = data;
-        response.rowCount = data.length;
-        response.limit = Number(limit);
-      } else
+        response.lastTimeUpdated = new Date(rows[0].last_update).toLocaleString();
+      else
       {
         response.status = 500;
         response.errorMessage = "Ups! An error has ocurred, try again later.";
       }
     }
-    res.status(response.status).json(response);
   } catch (error)
   {
     response.status = 500;
@@ -61,5 +53,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   {
     close(connection);
   }
-
+  res.status(response.status).json(response);
 }

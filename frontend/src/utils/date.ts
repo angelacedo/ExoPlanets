@@ -1,4 +1,4 @@
-import { ExoplanetByMonth } from "@/models/DashBoard/Exoplanet";
+import { ExoplanetByMonth } from "@/models/Global/Exoplanet";
 
 export const getMonthName = (monthNumber: number) =>
 {

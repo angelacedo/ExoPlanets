@@ -1,4 +1,5 @@
-import { ExoplanetByMonth } from '@/models/DashBoard/Exoplanet';
+import Loader from '@/components/Loader';
+import { ExoplanetByMonth } from '@/models/Global/Exoplanet';
 import { filterYearFromDiscoveredExoplanets, getMonthName, getYearsFromDiscoveredExoplanets } from '@utils/date';
 import { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -29,7 +30,7 @@ const EvolutionExoDiscover: React.FC<Props> = ({ data, month, year }) =>
     useEffect(() => setActualYearData(filterYearFromDiscoveredExoplanets(data, year)), [data?.length ?? 0 > 0]);
 
     return (
-        <div className='w-[100%] md:w-[59%] ml-[1%] sm: md:mt-0 mt-[1%] shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
+        <div className='w-[100%] md:w-[59%] md:mt-0 ml-0 md:ml-2 mt-[1%] shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
             {actualYearData && actualYearData.length > 0 ? <>
                 <div className='flex justify-between p-3 md:px-0 py-1'>
                     <h3 className='font-bold'>Evolution of the discovered exoplanets</h3>
@@ -42,18 +43,18 @@ const EvolutionExoDiscover: React.FC<Props> = ({ data, month, year }) =>
                         margin={{ top: 30, right: 40, left: 0, bottom: 30 }}>
                         <defs>
                             <linearGradient id="colorValue" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stopColor="var(--areachar-color)" />
+                                <stop offset="0%" stopColor="var(--accent-color)" />
                                 <stop offset="100%" stopColor="#ffffff" />
                             </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="5" vertical={false} />
-                        <XAxis dataKey="month" stroke="var(--bg-color-bar-chart-axe)" tickLine={false} />
-                        <YAxis axisLine={false} tickMargin={10} tickLine={false} stroke="var(--bg-color-bar-chart-axe)" />
+                        <XAxis dataKey="month" stroke="var(--color-axe)" tickLine={false} />
+                        <YAxis axisLine={false} tickMargin={10} tickLine={false} stroke="var(--color-axe)" />
                         <Tooltip content={<CustomTooltip />} />
                         <Area type="monotone"
                             dataKey="exoplanetsCount"
                             strokeWidth={3}
-                            stroke="var(--areachar-color)"
+                            stroke="var(--accent-color)"
                             fill="url(#colorValue)"
                             isAnimationActive={true} // Activa la animación
                             animationBegin={0} // Tiempo de espera antes de empezar (en ms)
@@ -61,7 +62,7 @@ const EvolutionExoDiscover: React.FC<Props> = ({ data, month, year }) =>
 
                         />
                     </AreaChart>
-                </ResponsiveContainer></> : <p>Loading data</p>}
+                </ResponsiveContainer></> : <div className='flex justify-center items-center h-full'>{Loader(true, 50)}</div>}
 
         </div>
 

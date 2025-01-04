@@ -1,7 +1,6 @@
-import { getExoplanets, getExoplanetsByMonth, getNumberOfClosestPlanets, getNumberOfExoplanets } from '@/api/Exoplanets';
-import { Exoplanet, ExoplanetByMonth } from '@/models/DashBoard/Exoplanet';
+import { getExoplanets, getExoplanetsByMonth, getLastTimeUpdated, getNumberOfClosestPlanets, getNumberOfExoplanets } from '@/api/Exoplanets';
 import { TopCards } from '@/models/DashBoard/TopCards';
-import { ExoplanetsData } from '@/models/Repository/ExoplanetsData';
+import { Exoplanet, ExoplanetByMonth } from '@/models/Global/Exoplanet';
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DashBoard from './DashBoard/DashBoard';
@@ -15,98 +14,75 @@ const Index = () =>
         closestExoplanetsNumber: null,
         discoveredExoplanetsNumber: null,
         discoveredExoplanetsNumberThisYear: null,
-        habitablePlanetsNumber: null
+        lastTimeUpdated: null
     });
     const [exoplanetsByMonth, setExoplanetsByMonth] = useState<ExoplanetByMonth[]>();
     const [lastestExoplanets, setLastestExoplanets] = useState<Exoplanet[]>();
     const date = new Date();
 
-    //Repository
-    const [exoplanetsPage, setExoplanetsPage] = useState<ExoplanetsData>({
-        actualMaxRegistry: 0,
-        actualPage: 1,
-        exoplanetsData: [],
-        nextPage: null,
-        previousPage: 2
-    });
-
-    const modifyExoplanetsPage = (newReg: ExoplanetsData) => {
-        setExoplanetsPage(newReg);
-    }
-
-
     /* DashBoard */
     useEffect(() =>
     {
-
-        getNumberOfExoplanets(null).then(async res =>
-        {
-            setTopCardsValues(prevState => ({
-                ...prevState,
-                discoveredExoplanetsNumber: res
-            }));
-
-        });
-
-        getNumberOfClosestPlanets(null).then(async res =>
-        {
-            setTopCardsValues(prevState => ({
-                ...prevState,
-                closestExoplanetsNumber: res
-            }));
-        });
-
-        getNumberOfExoplanets(date.getFullYear()).then(async res =>
-        {
-            setTopCardsValues(prevState => ({
-                ...prevState,
-                discoveredExoplanetsNumberThisYear: res
-            }));
-        });
-
-        getExoplanetsByMonth().then(res =>
-        {
-
-            setExoplanetsByMonth(
-                res.map(({ year, month, exoplanetsCount }: any) => ({
-                    year,
-                    month,
-                    exoplanetsCount
-                }
-                ))
-            );
-        });
-
-        getExoplanets(10, 0).then((res: Exoplanet[]) => setLastestExoplanets(res));
-    }, []);
-
-
-    /*Repository*/
-    useEffect(() =>
-    {
-
-        getExoplanets(exoplanetsPage.actualMaxRegistry + 10, exoplanetsPage.actualMaxRegistry).then((res: Exoplanet[]) =>
-        {
-            setExoplanetsPage((prevState: ExoplanetsData) =>
+        if (topCardsValues.discoveredExoplanetsNumber === null)
+            getNumberOfExoplanets(null).then(async res =>
             {
-                if (!prevState) return prevState;
-
-                return {
+                setTopCardsValues(prevState => ({
                     ...prevState,
-                    exoplanetsPage: res
-                };
+                    discoveredExoplanetsNumber: res
+                }));
+
             });
-        })
+        if (topCardsValues.closestExoplanetsNumber === null)
+            getNumberOfClosestPlanets(null).then(async res =>
+            {
+                setTopCardsValues(prevState => ({
+                    ...prevState,
+                    closestExoplanetsNumber: res
+                }));
+            });
 
+        if (topCardsValues.discoveredExoplanetsNumberThisYear === null)
+            getNumberOfExoplanets(date.getFullYear()).then(async res =>
+            {
+                setTopCardsValues(prevState => ({
+                    ...prevState,
+                    discoveredExoplanetsNumberThisYear: res
+                }));
+            });
+
+        if (topCardsValues.lastTimeUpdated === null)
+            getLastTimeUpdated().then(async last_update =>
+            {
+                console.log(last_update);
+                setTopCardsValues(prevState => ({
+                    ...prevState,
+                    lastTimeUpdated: new Date(last_update)
+                }));
+            });
+
+        if (exoplanetsByMonth === undefined)
+            getExoplanetsByMonth().then(res =>
+            {
+
+                setExoplanetsByMonth(
+                    res.map(({ year, month, exoplanetsCount }: any) => ({
+                        year,
+                        month,
+                        exoplanetsCount
+                    }
+                    ))
+                );
+            });
+
+        if (lastestExoplanets === undefined)
+            getExoplanets(10, 0).then((res: Exoplanet[]) => setLastestExoplanets(res));
     }, []);
-
-
     return (
         <BrowserRouter>
             <Header />
             <Routes>
-                <Route index element={<DashBoard topCardsValues={topCardsValues} exoplanetsByMonth={exoplanetsByMonth} lastestExoplanets={lastestExoplanets} actualDate={date} />} />
-                <Route path='/repository' element={<Repository exoplanetsPage={exoplanetsPage} setExoplanetsPage={modifyExoplanetsPage}/>} />
+                <Route index element={<DashBoard topCardsValues={topCardsValues} exoplanetsByMonth={exoplanetsByMonth} lastestExoplanets={lastestExoplanets} actualDate={date}/>} />
+                <Route path='/repository' element={<Repository />} />
             </Routes>
         </BrowserRouter>
     );

@@ -4,9 +4,9 @@ function Header()
 {
 
   return (
-    <header className='flex w-full border-b-[1px] border-b-[var(--bg-color-bar-chart-axe)] shadow-md' >
+    <header className='flex w-full border-b-[1px] shadow-md' >
       <div className='w-[20%]'>
-        <img src={logo} width={100} alt="" />
+        <img src={logo} width={70} alt="planet logo" className='ml-3' />
       </div>
       <nav className="font-thin flex items-center">
         <Link className='mx-auto mr-5' color='var(--generic-text-color)' to="/">DashBoard</Link>
