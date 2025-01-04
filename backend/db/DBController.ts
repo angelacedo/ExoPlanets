@@ -33,12 +33,12 @@ const close = (connection: Connection) =>
 };
 
 
-const executeQuery = (connection: Connection, sql: string, params: any[]) =>
+const executeQuery = (connection: Connection, sql: string, params: (string | string[] | number)[]) =>
 {
-    const query: QueryOptions = {sql, values: params}
+    const query: QueryOptions = {sql, values: params};
     console.log(query)
     return connection.execute<RowDataPacket[]>(query);
 };
 
-
-export { close, connect, executeQuery };
+const toExport = { connect, close, executeQuery };
+export default toExport

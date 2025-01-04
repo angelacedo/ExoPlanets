@@ -2,8 +2,8 @@ import { Exoplanet } from "@/models/Exoplanet";
 import { Response } from "@/models/Response";
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from "next";
-import { close, connect, executeQuery } from "../../db/DBController";
-import DBqueries from "../../db/DBqueries";
+import DBController from "../../../db/DBController";
+import DBqueries from "../../../db/DBqueries";
 import { runMiddleware } from "../middlewares/middleware";
 // Inicializamos cors
 const cors = Cors({
@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
   const middlewareResponse = await runMiddleware(req, res, cors);
 
-  let response: Response = {
+  const response: Response = {
     status: 200,
     errorMessage: null,
     data: null,
@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   };
 
 
-  const connection = await connect();
+  const connection = await DBController.connect();
   try
   {
     if (middlewareResponse instanceof Error)
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { limit, fromOrigin } = req.query;
       const baseurl: string = DBqueries.getExoplanets(limit);
 
-      let [rows] = await executeQuery(connection, baseurl, fromOrigin && limit ? [fromOrigin, limit] : []);
+      const [rows] = await DBController.executeQuery(connection, baseurl, fromOrigin && limit ? [fromOrigin, limit] : []);
       if (rows)
       {
         const data = (rows as Exoplanet[]);
@@ -59,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(response.status).json(response);
   } finally
   {
-    close(connection);
+    DBController.close(connection);
   }
 
 }

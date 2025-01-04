@@ -4,8 +4,8 @@ import { Filters } from "@/models/Repository/Filters";
 import { Response } from "@/models/Response";
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from "next";
-import { close, connect, executeQuery } from "../../db/DBController";
-import DBqueries from "../../db/DBqueries";
+import DBController from "../../../db/DBController";
+import DBqueries from "../../../db/DBqueries";
 import { runMiddleware } from "../middlewares/middleware";
 // Inicializamos cors
 const cors = Cors({
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
   const middlewareResponse = await runMiddleware(req, res, cors);
 
-  let response: Response = {
+  const response: Response = {
     status: 200,
     errorMessage: null,
     data: null,
@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   };
 
 
-  const connection = await connect();
+  const connection = await DBController.connect();
   try
   {
     if (middlewareResponse instanceof Error)
@@ -39,8 +39,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const decodedFilters: Filters = JSON.parse(decodeURIComponent(filters as string));
       const query: string = DBqueries.getExoplanetsWithFilters(limit, createFilters(decodedFilters));
       const countQuery: string = DBqueries.removeOffsetAndCountRows(query);
-      let [rows] = await executeQuery(connection, query, fromOrigin && limit ? [fromOrigin, limit] : []);
-      let [countRows] = await executeQuery(connection, countQuery, []);
+      const [rows] = await DBController.executeQuery(connection, query, fromOrigin && limit ? [fromOrigin, limit] : []);
+      const [countRows] = await DBController.executeQuery(connection, countQuery, []);
       if (rows)
       {
         const data = (rows as Exoplanet[]);
@@ -65,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(response.status).json(response);
   } finally
   {
-    close(connection);
+    DBController.close(connection);
   }
 
 }
@@ -111,7 +111,7 @@ export const createFilters = (decodedFilters: Filters): string =>
   {
 
     if (decodedFilters.rangeFilters && decodedFilters.rangeFilters.length > 0)
-      decodedFilters.rangeFilters.map((rangeFilters, index) =>
+      decodedFilters.rangeFilters.map((rangeFilters) =>
       {
 
         switch (rangeFilters.title)
@@ -132,9 +132,11 @@ export const createFilters = (decodedFilters: Filters): string =>
         if (index == 0 && selectFilters.value != PlanetType.UnFiltered)
         {
           const query = getPlanetTypeQuery(selectFilters.value);
-          query != null ? filtersQuery += 'AND ' + query : null;
+          if(query != null)
+            filtersQuery += 'AND ' + query;
         } else if (index == 1 && selectFilters.value != PlanetType.UnFiltered)
-          selectFilters.value != null ? filtersQuery += `AND discoverymethod = '${selectFilters.value}' ` : null;
+        if (selectFilters.value != null)
+          filtersQuery += `AND discoverymethod = '${selectFilters.value}' `;
       });
 
     if (decodedFilters.searchByText)

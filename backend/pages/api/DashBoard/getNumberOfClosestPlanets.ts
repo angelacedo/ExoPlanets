@@ -2,8 +2,8 @@ import { Response } from "@/models/Response";
 import Cors from 'cors';
 import { FieldPacket, RowDataPacket } from "mysql2";
 import { NextApiRequest, NextApiResponse } from "next";
-import { close, connect, executeQuery } from "../../db/DBController";
-import DBqueries from "../../db/DBqueries";
+import DBController from "../../../db/DBController";
+import DBqueries from "../../../db/DBqueries";
 import { runMiddleware } from "../middlewares/middleware";
 
 // Inicializamos cors
@@ -15,12 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
   const middlewareResponse = await runMiddleware(req, res, cors);
 
-  let response: Response = {
+  const response: Response = {
     status: 200,
     errorMessage: null,
     data: null
   };
-  const connection = await connect();
+  const connection = await DBController.connect();
   try
   {
     if (middlewareResponse instanceof Error)
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     {
       const distance = req.query.distance || "10";
       const sql: string = DBqueries.getNumberOfClosestPlanets();
-      let [rows]: [RowDataPacket[], FieldPacket[]] = await executeQuery(connection, sql, [Number(distance)]);
+      const [rows]: [RowDataPacket[], FieldPacket[]] = await DBController.executeQuery(connection, sql, [Number(distance)]);
       if (rows)
         response.rowCount = rows[0].count;
       else
@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(response.status).json(response);
   } finally
   {
-    close(connection);
+    DBController.close(connection);
   }
   res.status(response.status).json(response);
 }

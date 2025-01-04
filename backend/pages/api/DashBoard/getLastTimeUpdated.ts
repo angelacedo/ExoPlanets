@@ -2,8 +2,8 @@ import { Response } from "@/models/Response";
 import Cors from 'cors';
 import { FieldPacket, RowDataPacket } from "mysql2";
 import { NextApiRequest, NextApiResponse } from "next";
-import { close, connect, executeQuery } from '../../db/DBController';
-import DBQueries from "../../db/DBqueries";
+import DBController from '../../../db/DBController';
+import DBQueries from "../../../db/DBqueries";
 import { runMiddleware } from "../middlewares/middleware";
 
 // Inicializamos cors
@@ -14,13 +14,13 @@ const cors = Cors({
 export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
   const middlewareResponse = await runMiddleware(req, res, cors);
-  let response: Response = {
+  const response: Response = {
     status: 200,
     errorMessage: null,
     data: null,
     lastTimeUpdated: null
   };
-  const connection = await connect();
+  const connection = await DBController.connect();
   try
   {
     if (middlewareResponse instanceof Error)
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     else
     {
       const sql: string = DBQueries.getLastTimeUpdated();
-      let [rows]: [RowDataPacket[], FieldPacket[]] = await executeQuery(connection, sql, []);
+      const [rows]: [RowDataPacket[], FieldPacket[]] = await DBController.executeQuery(connection, sql, []);
       console.log(new Date(rows[0].last_update).toLocaleString());
       if (rows)
         response.data = new Date(rows[0].last_update);
@@ -51,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(response.status).json(response);
   } finally
   {
-    close(connection);
+    DBController.close(connection);
   }
   res.status(response.status).json(response);
 }
