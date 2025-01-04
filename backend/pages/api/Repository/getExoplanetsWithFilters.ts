@@ -117,10 +117,10 @@ export const createFilters = (decodedFilters: Filters): string =>
         switch (rangeFilters.title)
         {
           case "Eccentric Orbit":
-            filtersQuery += `AND pl_orbeccen BETWEEN ${rangeFilters.value[0]} AND ${rangeFilters.value[1]} `;
+            filtersQuery += `AND ((pl_orbeccen BETWEEN ${rangeFilters.value[0]} AND ${rangeFilters.value[1]}) ${rangeFilters.allowNullValues ? 'OR pl_orbeccen IS NULL ' : ''}) `;
             break;
           case "Distance to Earth (ly)":
-            filtersQuery += `AND sy_dist BETWEEN ${rangeFilters.value[0]} AND ${rangeFilters.value[1]} `;
+            filtersQuery += `AND ((sy_dist BETWEEN ${rangeFilters.value[0]} AND ${rangeFilters.value[1]}) ${rangeFilters.allowNullValues ? 'OR sy_dist IS NULL ' : ''}) `;
             break;
         }
       });

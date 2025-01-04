@@ -16,7 +16,8 @@ export interface RangeFilters
     value: [number, number],
     minValue: number,
     maxValue: number,
-    step: number
+    step: number,
+    allowNullValues: boolean
 }
 
 export interface SelectFilters

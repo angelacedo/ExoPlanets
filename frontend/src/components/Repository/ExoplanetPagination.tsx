@@ -108,7 +108,7 @@ const ExoplanetPagination: React.FC<Props> = ({ filters, setInfoExoplanetsData, 
     const table: Table<Exoplanet> = PaginatedTable(tableColumns, infoExoplanetsData.exoplanetsData);
     return (
         <section className={`mt-8 ${className}`} style={{ backgroundColor: 'var(--bg-color)' }}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2">
                 {table.getRowModel().rows.length > 0 ? (
                     table.getRowModel().rows.map((row) => (
                         <div key={row.id} className="rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-105" style={{ background: 'var(--bg-color-top-card)' }}>

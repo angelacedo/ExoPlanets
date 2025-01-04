@@ -15,7 +15,7 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className 
             ...filters,
             rangeFilters: (filters.rangeFilters ?? []).map((val) =>
             {
-                return { ...val, value: [val.minValue, val.maxValue] };
+                return { ...val, value: [val.minValue, val.maxValue], allowNullValues: false };
             }),
             selectFilters: (filters.selectFilters ?? []).map((val) =>
             {
@@ -36,7 +36,16 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className 
         };
         setFilters(rangeFilters);
     };
-
+    const checkBoxNullFilter = (rangeIndex: number): void =>
+    {
+        const rangeFilters: Filters = {
+            ...filters,
+            rangeFilters: (filters.rangeFilters ?? []).map((val, index) =>
+                rangeIndex === index ? { ...val, allowNullValues: !val.allowNullValues } : val
+            )
+        };
+        setFilters(rangeFilters);
+    };
     const checkSelectFilter = (selectIndex: number, newValue: string) =>
     {
         const selectFilters: Filters = {
@@ -57,6 +66,7 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className 
         setFilters(applyChanges);
     }
 
+
     return (
         <section className={className}>
             <div className="rounded-lg shadow-lg p-3 mt-2">
@@ -64,9 +74,9 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className 
                     className="w-full mb-3"
                     onClick={() => resetFilters()}>Clear All</button>
                 <div>
-                    {filters.rangeFilters && (filters.rangeFilters.map((val, checkBoxIndex) =>
-                        <div className="mx-center my-2" key={`flt-${checkBoxIndex}`}>
-                            <label htmlFor={`lbl-${checkBoxIndex}`} className="flex items-center">
+                    {filters.rangeFilters && (filters.rangeFilters.map((val, rangeFilters) =>
+                        <div className="mx-center my-2 flex items-center" key={`flt-${rangeFilters}`}>
+                            <label htmlFor={`lbl-${rangeFilters}`} className="flex items-center w-[70%]">
                                 <span className="my-2 w-[35%] font-bold">{val.title}</span>
                                 <ReactSlider
                                     className="horizontal-slider"
@@ -84,10 +94,14 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className 
                                     pearling
                                     step={val.step}
                                     minDistance={val.step}
-                                    onChange={(newValues) => checkRangeFilter(checkBoxIndex, newValues)}
+                                    onChange={(newValues) => checkRangeFilter(rangeFilters, newValues)}
                                 />
-
                             </label>
+                            <label htmlFor={`lbl-${rangeFilters}`} className="flex items-center w-[30%]">
+                                <span className="my-2 font-bold">N/A</span>
+                                <input type="checkbox" className="ml-2" onChange={() => checkBoxNullFilter(rangeFilters)} checked={val.allowNullValues} />
+                            </label>
+
                         </div>
 
                     ))}
@@ -99,9 +113,9 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className 
                             <span className="mr-2 cursor-pointer font-bold" >{val.title}</span>
                             <label htmlFor={`lbl-${selectIndex}`} key={`flt-${selectIndex}`} className="flex items-center py-2">
                                 <select name={val.title}
-                                className="w-[85%]"
+                                    className="w-[85%]"
                                     onChange={(e) => checkSelectFilter(selectIndex, e.currentTarget.value)}>
-                                    {val.options.map((option, optionIndex) => <option value={option}>{option}</option>)}
+                                    {val.options.map((option) => <option value={option}>{option}</option>)}
                                 </select>
                             </label>
                         </>

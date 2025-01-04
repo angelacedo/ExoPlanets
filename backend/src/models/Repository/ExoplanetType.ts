@@ -7,6 +7,5 @@ export enum PlanetType
   SubNeptune = "SubNeptune",
   SuperEarth = "Super-Earth",
   Terrestrial = "Terrestrial",
-  Unknown = "Unknown",
-
+  Unknown = "Unknown"
 }

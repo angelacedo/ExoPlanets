@@ -17,8 +17,8 @@ const Repository = () =>
     clearButton: false,
     searchByText: null,
     rangeFilters: [
-      { value: [0, 1], title: "Eccentric Orbit", minValue: 0, maxValue: 1, step: 0.01 },
-      { value: [0, 25000], title: "Distance to Earth (ly)", minValue: 0, maxValue: 25000, step: 1 }
+      { value: [0, 1], title: "Eccentric Orbit", minValue: 0, maxValue: 1, step: 0.01, allowNullValues: false },
+      { value: [0, 25000], title: "Distance to Earth (ly)", minValue: 0, maxValue: 25000, step: 1, allowNullValues: false}
     ],
     selectFilters: [
       { title: "Planet Type", options: [PlanetType.UnFiltered, PlanetType.GasGiant, PlanetType.HotJupiter, PlanetType.NeptuneLike, PlanetType.SubNeptune, PlanetType.SuperEarth, PlanetType.Terrestrial, PlanetType.Unknown], value: PlanetType.UnFiltered },
