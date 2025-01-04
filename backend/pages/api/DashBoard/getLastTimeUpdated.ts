@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       let [rows]: [RowDataPacket[], FieldPacket[]] = await executeQuery(connection, sql, []);
       console.log(new Date(rows[0].last_update).toLocaleString());
       if (rows)
-        response.lastTimeUpdated = new Date(rows[0].last_update).toLocaleString();
+        response.data = new Date(rows[0].last_update);
       else
       {
         response.status = 500;

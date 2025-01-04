@@ -36,7 +36,7 @@ export const getLastTimeUpdated = async () =>
 {
     const url = `${import.meta.env.VITE_API_URL}DashBoard/getLastTimeUpdated`;
     const response = await (await fetch(url)).json();
-    return response.lastTimeUpdated;
+    return response.data;
 };
 //Repository
 export const getExoplanetsWithFilters = async (limit: number | null, fromOrigin: number | null, filters: Filters) =>
