@@ -1,3 +1,4 @@
+import { ExoplanetsData } from "@/models/Repository/ExoplanetsData";
 import { Filters } from "@/models/Repository/Filters";
 import ReactSlider from 'react-slider';
 interface Props
@@ -5,8 +6,9 @@ interface Props
     filters: Filters,
     setFilters: React.Dispatch<React.SetStateAction<Filters>>;
     className?: string;
+    setInfoExoplanetsData: React.Dispatch<React.SetStateAction<ExoplanetsData>>
 }
-const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className }) =>
+const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className, setInfoExoplanetsData }) =>
 {
 
     const resetFilters = () =>
@@ -24,6 +26,8 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className 
             applyChanges: true
         };
         setFilters(newfilters);
+
+
     };
 
     const checkRangeFilter = (rangeIndex: number, newValues: number[]) =>
@@ -64,6 +68,7 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className 
             applyChanges: true
         };
         setFilters(applyChanges);
+        setInfoExoplanetsData(prevState => ({...prevState, isLoading: true}))
     }
 
 

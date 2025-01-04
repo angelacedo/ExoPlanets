@@ -60,7 +60,8 @@ const Repository = () =>
           ...prevState,
           exoplanetsData: res.data as Exoplanet[],
           numberOfPages: Math.ceil((res.rowCountWithoutFilters ?? 0) / Number(infoExoplanetsData.registriesPerPage)),
-          actualPage: 1
+          actualPage: 1,
+          isLoading: false
         }));
       }
       ).then(() =>
@@ -73,11 +74,11 @@ const Repository = () =>
 
   return (
     <div className="my-3 mx-5">
-      <ExoplanetHeader filters={filters} setFilters={setFilters} />
+      <ExoplanetHeader filters={filters} setFilters={setFilters}/>
       {infoExoplanetsData.exoplanetsData?.length ?? 0 > 0 ?
         filters.showFilters ?
           <div className="flex w-full">
-            <ExoplanetRepoFilters filters={filters} setFilters={setFilters}
+            <ExoplanetRepoFilters filters={filters} setFilters={setFilters} setInfoExoplanetsData={setInfoExoplanetsData}
               className="w-[50%] absolute z-50 md:w-[30%] lg:w-[20%] md:relative bg-[var(--bg-color)]" />
             <ExoplanetPagination filters={filters} setInfoExoplanetsData={setInfoExoplanetsData} infoExoplanetsData={infoExoplanetsData}
               className="sm:w-full md:w-[70%] lg:md:w-[80%]" />
