@@ -49,7 +49,7 @@ const LastExoplanetsTable: React.FC<Props> = ({ data }) =>
                             <thead>
                                 {table.getHeaderGroups().map((headerGroup) => (
                                     <tr className="border-b border-collapse" key={headerGroup.id}>
-                                        {headerGroup.headers.map((header, index) => (
+                                        {headerGroup.headers.map((header) => (
                                             <th className="px-3 text-[var(--generic-text-color-black)]" key={header.id}>
                                                 {header.isPlaceholder ? null : String(header.column.columnDef.header)}
                                             </th>

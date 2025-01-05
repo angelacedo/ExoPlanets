@@ -27,7 +27,7 @@ const DashBoard: React.FC<Props> = ({topCardsValues, exoplanetsByMonth, lastestE
             <section>
                 <div className='flex flex-wrap sm:flex-row justify-center items-center lg:max-w-[80%] mx-auto my-3'>
                     <DiscoveredExoplanets data={exoplanetsByMonth} month={actualDate.getMonth()} year={actualDate.getFullYear()} />
-                    <EvolutionExoDiscover data={exoplanetsByMonth} month={actualDate.getMonth()} year={actualDate.getFullYear()} />
+                    <EvolutionExoDiscover data={exoplanetsByMonth} year={actualDate.getFullYear()} />
                 </div>
                 <div className='lg:max-w-[80%] mx-auto'>
                     <LastExoplanetsTable data={lastestExoplanets} />

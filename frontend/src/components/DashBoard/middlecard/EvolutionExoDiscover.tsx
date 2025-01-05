@@ -7,7 +7,6 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 interface Props
 {
     data: ExoplanetByMonth[] | undefined | null,
-    month: number;
     year: number;
 }
 const CustomTooltip = ({ active, payload }: any) =>
@@ -24,7 +23,7 @@ const CustomTooltip = ({ active, payload }: any) =>
 
     return null;
 };
-const EvolutionExoDiscover: React.FC<Props> = ({ data, month, year }) =>
+const EvolutionExoDiscover: React.FC<Props> = ({ data, year }) =>
 {
     const [actualYearData, setActualYearData] = useState<ExoplanetByMonth[] | null>();
     useEffect(() => setActualYearData(filterYearFromDiscoveredExoplanets(data, year)), [data?.length ?? 0 > 0]);
