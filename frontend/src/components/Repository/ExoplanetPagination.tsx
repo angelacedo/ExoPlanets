@@ -173,16 +173,16 @@ const ExoplanetPagination: React.FC<Props> = ({ setFilters, setInfoExoplanetsDat
                             </div>
                         )}
 
-                        {infoExoplanetsData.actualPage != infoExoplanetsData.numberOfPages && infoExoplanetsData.actualPage != 1 ? (
+                        {![1,infoExoplanetsData.numberOfPages].includes(infoExoplanetsData.actualPage) && (
                             <div
                                 className="w-10 h-10 flex justify-center items-center rounded-full m-1 cursor-pointer transition-colors duration-300"
                                 style={{ border: '1px solid var(--info-color)' }}
                             >
                                 <p style={{ color: 'var(--generic-text-color-black)' }}>{infoExoplanetsData.actualPage}</p>
                             </div>
-                        ) : null}
+                        )}
 
-                        {(infoExoplanetsData.numberOfPages != 0) && (
+                        {infoExoplanetsData.numberOfPages && !([0,1].includes(infoExoplanetsData.numberOfPages)) && (
                             <div
                                 className="w-10 h-10 flex justify-center items-center rounded-full m-1 cursor-pointer transition-colors duration-300"
                                 style={{ border: '1px solid var(--info-color)' }}

@@ -59,7 +59,9 @@ const Repository = React.memo(() =>
   {
     console.log(infoExoplanetsData.exoplanetsData);
     let content;
-    if (infoExoplanetsData.exoplanetsData && infoExoplanetsData.exoplanetsData.length > 0)
+    if (infoExoplanetsData.isLoading)
+      content = Loader(infoExoplanetsData.isLoading, 50, { margin: "0 auto", display: "block" });
+    else if (infoExoplanetsData.exoplanetsData && infoExoplanetsData.exoplanetsData.length > 0)
       content = filters.showFilters ?
         <div className="flex w-full">
           <ExoplanetRepoFilters filters={filters} setFilters={setFilters} setInfoExoplanetsData={setInfoExoplanetsData}
@@ -76,8 +78,6 @@ const Repository = React.memo(() =>
           <p className="sm:w-full md:w-[70%] lg:md:w-[80%] text-center">No data found</p>
         </div>
         : <p className="w-full text-center">No data found</p>;
-    else if (infoExoplanetsData.isLoading)
-      content = Loader(infoExoplanetsData.isLoading, 50, { margin: "0 auto", display: "block" });
 
     return content;
 

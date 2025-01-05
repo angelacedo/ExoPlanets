@@ -6,7 +6,7 @@ interface Props
     filters: Filters,
     setFilters: React.Dispatch<React.SetStateAction<Filters>>;
     className?: string;
-    setInfoExoplanetsData: React.Dispatch<React.SetStateAction<ExoplanetsData>>
+    setInfoExoplanetsData: React.Dispatch<React.SetStateAction<ExoplanetsData>>;
 }
 const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className, setInfoExoplanetsData }) =>
 {
@@ -61,12 +61,9 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className,
     };
     function applyChanges(): void
     {
-        const applyChanges: Filters = {
-            ...filters,
-            applyChanges: true
-        };
-        setFilters(applyChanges);
-        setInfoExoplanetsData(prevState => ({...prevState, exoplanetsData: [], isLoading: true}))
+        setInfoExoplanetsData(prevState => ({ ...prevState, isLoading: true }));
+        setFilters({ ...filters, applyChanges: true });
+
     }
 
 
@@ -117,6 +114,7 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className,
                             <span className="mr-2 cursor-pointer font-bold" >{val.title}</span>
                             <label htmlFor={`lbl-${selectIndex}`} key={`flt-${selectIndex}`} className="flex items-center py-2">
                                 <select name={val.title}
+                                    defaultValue={val.value ?? 0}
                                     className="w-[85%]"
                                     onChange={(e) => checkSelectFilter(selectIndex, e.currentTarget.value)}>
                                     {val.options.map((option) => <option value={option}>{option}</option>)}

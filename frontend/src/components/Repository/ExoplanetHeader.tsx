@@ -18,7 +18,7 @@ const ExoplanetHeader: React.FC<ExoplanetHeaderProps> = ({ filters, setFilters }
 
             <div className="flex items-center border p-3 border-[var(--info-color)] rounded-[40px]">
                 <input className="bg-transparent" type="text" name="search" placeholder="Search..." onChange={(e) => setSearchText(e.currentTarget.value)} />
-                <IoSearch className="cursor-pointer" onClick={() => setFilters({ ...filters, searchByText: searchText, applyChanges: true })}/>
+                <IoSearch className="cursor-pointer" onClick={() => setFilters({ ...filters, searchByText: searchText ? searchText : null, applyChanges: true })}/>
             </div>
 
 
