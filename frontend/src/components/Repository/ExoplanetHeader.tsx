@@ -10,7 +10,6 @@ interface ExoplanetHeaderProps
 
 const ExoplanetHeader: React.FC<ExoplanetHeaderProps> = ({ filters, setFilters }) =>
 {
-
     const [searchText, setSearchText] = React.useState<string | null>(null);
     return (
         <div className="flex justify-between">

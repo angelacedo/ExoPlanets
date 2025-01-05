@@ -9,13 +9,13 @@ import Loader from "../Loader";
 
 interface Props
 {
-    filters: Filters;
+    setFilters: React.Dispatch<React.SetStateAction<Filters>>,
     setInfoExoplanetsData: React.Dispatch<React.SetStateAction<ExoplanetsData>>,
     infoExoplanetsData: ExoplanetsData,
     className?: string;
 
 }
-const ExoplanetPagination: React.FC<Props> = ({ filters, setInfoExoplanetsData, infoExoplanetsData, className }) =>
+const ExoplanetPagination: React.FC<Props> = ({ setFilters, setInfoExoplanetsData, infoExoplanetsData, className }) =>
 {
 
     const tableColumns = useMemo<ColumnDef<Exoplanet>[]>(
@@ -88,23 +88,30 @@ const ExoplanetPagination: React.FC<Props> = ({ filters, setInfoExoplanetsData, 
     const changeRepoExoplanetsPage = (newPage: number | null) =>
     {
         if (newPage)
+        {
             setInfoExoplanetsData(prevState => ({
                 ...prevState,
                 isLoading: true,
                 actualPage: newPage
-            })
-            );
+            }));
+
+            setFilters(prevState => ({ ...prevState, applyChanges: true }));
+        }
+
     };
     const changeRepoExoplanetsRowsPerPage = (registriesPerPage: number | null) =>
     {
-        console.log(registriesPerPage);
         if (registriesPerPage)
+        {
             setInfoExoplanetsData(prevState => ({
                 ...prevState,
                 registriesPerPage: registriesPerPage,
+                actualPage: 1,
                 isLoading: true
-            })
-            );
+            }));
+
+            setFilters(prevState => ({...prevState, applyChanges: true}))
+        }
     };
 
     const table: Table<Exoplanet> = PaginatedTable(tableColumns, infoExoplanetsData.exoplanetsData);
@@ -207,12 +214,13 @@ const ExoplanetPagination: React.FC<Props> = ({ filters, setInfoExoplanetsData, 
                     </div>
 
                     <div className="flex justify-center items-center mt-4">
-                        <p className="m-1 mt-1" style={{ color: 'var(--generic-text-color-black)' }}>Rows per page</p>
+                        <p className="m-1 mt-1" style={{ color: 'var(--generic-text-color-black)' }}>Registries</p>
                         <select
-                            name="Rows per page"
+                            name="Registries"
                             className="h-10 mt-1 rounded-md px-2 py-1 focus:outline-none focus:ring-2"
                             style={{ color: 'var(--generic-text-color-black)', borderColor: 'var(--info-color)' }}
                             onChange={(e) => changeRepoExoplanetsRowsPerPage(Number(e.currentTarget.value))}
+                            defaultValue={infoExoplanetsData.registriesPerPage}
                         >
                             <option value="20">20</option>
                             <option value="50">50</option>
@@ -220,7 +228,7 @@ const ExoplanetPagination: React.FC<Props> = ({ filters, setInfoExoplanetsData, 
                         </select>
                     </div>
                 </div>
-            : Loader(infoExoplanetsData.isLoading, 50, { margin: "0 auto", display: "block" })}
+                : Loader(infoExoplanetsData.isLoading, 50, { margin: "0 auto", display: "block" })}
         </section>
     );
 };

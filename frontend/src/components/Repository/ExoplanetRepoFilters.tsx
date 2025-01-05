@@ -29,7 +29,6 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className,
 
 
     };
-
     const checkRangeFilter = (rangeIndex: number, newValues: number[]) =>
     {
         const rangeFilters: Filters = {
@@ -60,7 +59,6 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className,
         };
         setFilters(selectFilters);
     };
-
     function applyChanges(): void
     {
         const applyChanges: Filters = {
@@ -68,7 +66,7 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className,
             applyChanges: true
         };
         setFilters(applyChanges);
-        setInfoExoplanetsData(prevState => ({...prevState, isLoading: true}))
+        setInfoExoplanetsData(prevState => ({...prevState, exoplanetsData: [], isLoading: true}))
     }
 
 
@@ -110,6 +108,7 @@ const ExoplanetRepoFilters: React.FC<Props> = ({ filters, setFilters, className,
                         </div>
 
                     ))}
+
                 </div>
 
                 <div>

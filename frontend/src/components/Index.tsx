@@ -23,65 +23,47 @@ const Index = () =>
     /* DashBoard */
     useEffect(() =>
     {
-        if (topCardsValues.discoveredExoplanetsNumber === null)
-            getNumberOfExoplanets(null).then(async res =>
-            {
-                setTopCardsValues(prevState => ({
-                    ...prevState,
-                    discoveredExoplanetsNumber: res
-                }));
+        const fetchData = async () =>
+        {
+            const [
+                discoveredExoplanetsNumber,
+                closestExoplanetsNumber,
+                discoveredExoplanetsNumberThisYear,
+                lastTimeUpdated,
+                exoplanetsByMonthRes,
+                lastestExoplanetsRes,
+            ] = await Promise.all([
+                getNumberOfExoplanets(null),
+                getNumberOfClosestPlanets(null),
+                getNumberOfExoplanets(date.getFullYear()),
+                getLastTimeUpdated(),
+                getExoplanetsByMonth(),
+                getExoplanets(10, 0),
+            ]);
 
+            setTopCardsValues({
+                discoveredExoplanetsNumber,
+                closestExoplanetsNumber,
+                discoveredExoplanetsNumberThisYear,
+                lastTimeUpdated: new Date(lastTimeUpdated),
             });
-        if (topCardsValues.closestExoplanetsNumber === null)
-            getNumberOfClosestPlanets(null).then(async res =>
-            {
-                setTopCardsValues(prevState => ({
-                    ...prevState,
-                    closestExoplanetsNumber: res
-                }));
-            });
+            setExoplanetsByMonth(
+                exoplanetsByMonthRes.map(({ year, month, exoplanetsCount }: any) => ({
+                    year,
+                    month,
+                    exoplanetsCount,
+                }))
+            );
+            setLastestExoplanets(lastestExoplanetsRes);
+        };
 
-        if (topCardsValues.discoveredExoplanetsNumberThisYear === null)
-            getNumberOfExoplanets(date.getFullYear()).then(async res =>
-            {
-                setTopCardsValues(prevState => ({
-                    ...prevState,
-                    discoveredExoplanetsNumberThisYear: res
-                }));
-            });
-
-        if (topCardsValues.lastTimeUpdated === null)
-            getLastTimeUpdated().then(async last_update =>
-            {
-                console.log(last_update);
-                setTopCardsValues(prevState => ({
-                    ...prevState,
-                    lastTimeUpdated: new Date(last_update)
-                }));
-            });
-
-        if (exoplanetsByMonth === undefined)
-            getExoplanetsByMonth().then(res =>
-            {
-
-                setExoplanetsByMonth(
-                    res.map(({ year, month, exoplanetsCount }: any) => ({
-                        year,
-                        month,
-                        exoplanetsCount
-                    }
-                    ))
-                );
-            });
-
-        if (lastestExoplanets === undefined)
-            getExoplanets(10, 0).then((res: Exoplanet[]) => setLastestExoplanets(res));
+        fetchData();
     }, []);
     return (
         <BrowserRouter>
             <Header />
             <Routes>
-                <Route index element={<DashBoard topCardsValues={topCardsValues} exoplanetsByMonth={exoplanetsByMonth} lastestExoplanets={lastestExoplanets} actualDate={date}/>} />
+                <Route index element={<DashBoard topCardsValues={topCardsValues} exoplanetsByMonth={exoplanetsByMonth} lastestExoplanets={lastestExoplanets} actualDate={date} />} />
                 <Route path='/repository' element={<Repository />} />
             </Routes>
         </BrowserRouter>
