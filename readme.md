@@ -1,4 +1,4 @@
-# Exoplanet Repository
+# Exoplanets Repository
 
 This repository shows all exoplanets of the NASA Exoplanet Archive, using filters which allows you to find the information you need.
 
