@@ -2,7 +2,7 @@ import { getExoplanets, getExoplanetsByMonth, getLastTimeUpdated, getNumberOfClo
 import { TopCards } from '@/models/DashBoard/TopCards';
 import { Exoplanet, ExoplanetByMonth } from '@/models/Global/Exoplanet';
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import DashBoard from './DashBoard/DashBoard';
 import Header from './Header/Header';
 import Repository from './Repository/Repository';
@@ -65,6 +65,7 @@ const Index = () =>
             <Routes>
                 <Route index element={<DashBoard topCardsValues={topCardsValues} exoplanetsByMonth={exoplanetsByMonth} lastestExoplanets={lastestExoplanets} actualDate={date} />} />
                 <Route path='/repository' element={<Repository />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>
     );
