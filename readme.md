@@ -66,6 +66,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Your Name - [your-email@example.com](mailto:your-email@example.com)
+Angel Acedo - [angel.acedo2003@gmail.com](mailto:angel.acedo2003@gmail.com)
 
 Project Link: [https://github.com/angelacedo/ExoPlanets](https://github.com/angelacedo/ExoPlanets)
