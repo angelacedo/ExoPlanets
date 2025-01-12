@@ -8,7 +8,7 @@ import { runMiddleware } from "../middlewares/middleware";
 // Inicializamos cors
 const cors = Cors({
   methods: ['GET', 'HEAD'], // Define los métodos permitidos (puedes agregar POST, PUT, etc.)
-  oorigin: 'https://exoplanets.angelacedo.net/', // Permite todos los orígenes (esto debería cambiarse en producción para mayor seguridad)
+  origin: 'https://exoplanets.angelacedo.net/', // Permite todos los orígenes (esto debería cambiarse en producción para mayor seguridad)
 });
 export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
