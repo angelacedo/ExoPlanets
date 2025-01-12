@@ -29,7 +29,7 @@ const EvolutionExoDiscover: React.FC<Props> = ({ data, year }) =>
     useEffect(() => setActualYearData(filterYearFromDiscoveredExoplanets(data, year)), [data?.length ?? 0 > 0]);
 
     return (
-        <div className='w-[100%] md:w-[59%] md:mt-0 ml-0 md:ml-2 mt-[1%] shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
+        <div className='w-[100%] md:w-[59%] md:mt-0 ml-0 md:ml-2 mt-[1%] shadow-md rounded-lg bg-[var(--generic-text-color)] p-3 h-[450px]'>
             {actualYearData && actualYearData.length > 0 ? <>
                 <div className='flex justify-between p-3 md:px-0 py-1'>
                     <h3 className='font-bold'>Evolution of the discovered exoplanets</h3>

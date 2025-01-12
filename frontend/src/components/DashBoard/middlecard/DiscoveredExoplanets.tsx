@@ -49,18 +49,18 @@ const DiscoveredExoplanets: React.FC<Props> = ({ data, month, year }) =>
         else if (percentage != null && Number(percentage) < 0)
             return <p><span className='text-red-600'> {(percentage).toFixed(2)}</span>% more than last month</p>;
         else
-            return <span>NaN</span>;
+            return null;
     };
 
 
     useEffect(() => setActualYearData(filterYearFromDiscoveredExoplanets(data, year)), [data]);
     return (
 
-        <div className='w-[100%] md:w-[40%] shadow-md rounded-lg bg-cards-color p-3 h-[450px]'>
-            {actualYearData && actualYearData.length > 0 ? <>
+        <div className='w-[100%] md:w-[40%] shadow-md rounded-lg bg-[var(--generic-text-color)] p-3 h-[450px]'>
+            {actualYearData ? <>
                 <div className='p-3 md:px-0 py-1'>
                     <h3 className='font-bold'>Discovered Exoplanets by month</h3>
-                    {compareMonthPercentage()}
+                    {compareMonthPercentage() != null ? compareMonthPercentage() : null}
                 </div>
                 <ResponsiveContainer width="100%" height="80%">
                     <BarChart data={actualYearData} className="rounded-xl" margin={{ top: 30, right: 40, left: 0, bottom: 20 }}>

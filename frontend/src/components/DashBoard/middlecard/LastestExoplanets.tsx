@@ -1,4 +1,5 @@
 import { Exoplanet } from "@/models/Global/Exoplanet";
+import { DiscoveringMethod } from "@/models/Global/ExoplanetDiscMethod";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import React, { useMemo } from "react";
 
@@ -17,11 +18,43 @@ const LastExoplanetsTable: React.FC<Props> = ({ data }) =>
             },
             {
                 header: 'DISCOVERED METHOD',
-                accessorFn: (row) => row.discoverymethod
+                accessorFn: (row) =>
+                {
+                    switch (row.discoverymethod)
+                    {
+                        case DiscoveringMethod.AST:
+                            return <p className="text-red-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.ETV:
+                            return <p className="text-blue-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.DKIN:
+                            return <p className="text-pink-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.IMA:
+                            return <p className="text-purple-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.IMA:
+                            return <p className="text-brown-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.MICRO:
+                            return <p className="text-black-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.OBM:
+                            return <p className="text-orange-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.PTV:
+                            return <p className="text-brown-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.PUL:
+                            return <p className="text-grey-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.PUL:
+                            return <p className="text-amber-900">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.RV:
+                            return <p className="text-cyan-500">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.TTV:
+                            return <p className="text-indigo-800">{row.discoverymethod}</p>;
+                        case DiscoveringMethod.TRAN:
+                            return <p className="text-green-800">{row.discoverymethod}</p>;
+
+                    }
+                }
             },
             {
                 header: 'DISCOVERED PUBLIC DATE',
-                accessorFn: (row) => row.disc_pubdate,
+                accessorFn: (row) => new Date(row.disc_pubdate).toDateString(),
             },
             {
                 header: 'DISTANCE (LY)',
@@ -38,7 +71,7 @@ const LastExoplanetsTable: React.FC<Props> = ({ data }) =>
     });
 
     return (
-        <div className="w-[100%] text-left shadow-md rounded-lg bg-cards-color p-3">
+        <div className="w-[100%] text-left shadow-md rounded-lg bg-[var(--generic-text-color)] px-3 md:px-0 pt-1">
             <div className='p-3'>
                 <h3 className='font-bold'>Lastest Exoplanets</h3>
             </div>
@@ -50,7 +83,7 @@ const LastExoplanetsTable: React.FC<Props> = ({ data }) =>
                                 {table.getHeaderGroups().map((headerGroup) => (
                                     <tr className="border-b border-collapse" key={headerGroup.id}>
                                         {headerGroup.headers.map((header) => (
-                                            <th className="px-3 text-[var(--generic-text-color-black)]" key={header.id}>
+                                            <th className="p-2 text-[var(--generic-text-color-black)]" key={header.id}>
                                                 {header.isPlaceholder ? null : String(header.column.columnDef.header)}
                                             </th>
                                         ))}
@@ -61,7 +94,7 @@ const LastExoplanetsTable: React.FC<Props> = ({ data }) =>
                                 {table.getRowModel().rows.map((row, rowIndex) => (
                                     <tr className="border-b border-collapse" key={row.id}>
                                         {row.getVisibleCells().map((cell, cellIndex) => (
-                                            <td className={`px-3 font-thin text-[var(--generic-text-color-black)]}`}
+                                            <td className={`p-2 text-[var(--generic-text-color-black)] ${[0, 1, 2].includes(cellIndex) ? 'font-bold' : 'font-thin'}`}
                                                 data-rowindex={String(rowIndex)}
                                                 data-cellindex={String(cellIndex)}
                                                 key={cell.id}>

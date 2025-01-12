@@ -1,6 +1,6 @@
 import { getExoplanetsWithFilters } from "@/api/Exoplanets";
 import { Exoplanet } from "@/models/Global/Exoplanet";
-import { DiscoveringMethod } from "@/models/Repository/ExoplanetDiscMethod";
+import { DiscoveringMethod } from "@/models/Global/ExoplanetDiscMethod";
 import { ExoplanetsData } from "@/models/Repository/ExoplanetsData";
 import { PlanetType } from "@/models/Repository/ExoplanetType";
 import { Filters } from "@/models/Repository/Filters";
@@ -32,7 +32,7 @@ const Repository = React.memo(() =>
     actualPage: 1,
     exoplanetsData: null,
     numberOfPages: null,
-    registriesPerPage: 20,
+    registriesPerPage: 10,
     isLoading: true
   });
 
@@ -63,19 +63,19 @@ const Repository = React.memo(() =>
       content = Loader(infoExoplanetsData.isLoading, 50, { margin: "0 auto", display: "block" });
     else if (infoExoplanetsData.exoplanetsData && infoExoplanetsData.exoplanetsData.length > 0)
       content = filters.showFilters ?
-        <div className="flex w-full">
+        <div className="sm:flex w-full">
           <ExoplanetRepoFilters filters={filters} setFilters={setFilters} setInfoExoplanetsData={setInfoExoplanetsData}
-            className="w-[50%] absolute z-[100] md:w-[30%] lg:w-[20%] md:relative bg-[var(--bg-color)]" />
+            className="w-[50%] absolute z-[100] md:w-[30%] lg:w-[20%] bg-[var(--bg-color)] rounded-lg border-grey border" />
           <ExoplanetPagination setFilters={setFilters} setInfoExoplanetsData={setInfoExoplanetsData} infoExoplanetsData={infoExoplanetsData}
-            className="sm:w-full md:w-[70%] lg:md:w-[80%]" />
+            className="sm:w-full md:w-[100%]" />
         </div>
         : <ExoplanetPagination setFilters={setFilters} setInfoExoplanetsData={setInfoExoplanetsData} infoExoplanetsData={infoExoplanetsData} className="w-full" />;
     else if (infoExoplanetsData.exoplanetsData && infoExoplanetsData.exoplanetsData.length == 0)
       content = filters.showFilters ?
         <div className="flex w-full">
           <ExoplanetRepoFilters filters={filters} setFilters={setFilters} setInfoExoplanetsData={setInfoExoplanetsData}
-            className="w-[50%] absolute z-[100] md:w-[30%] lg:w-[20%] md:relative bg-[var(--bg-color)]" />
-          <p className="sm:w-full md:w-[70%] lg:md:w-[80%] text-center">No data found</p>
+            className="w-[50%] absolute z-[100] md:w-[30%] lg:w-[20%] bg-[var(--bg-color)]" />
+          <p className="sm:w-full md:w-[100%] text-center">No data found</p>
         </div>
         : <p className="w-full text-center">No data found</p>;
 
